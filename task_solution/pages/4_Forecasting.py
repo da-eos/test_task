@@ -37,7 +37,7 @@ st.markdown(
 """
 Let's prdict some trends related to specific parameters using Prophet forecasting model
 
-Choose: `N periods`, `company`, `service`, `specialty` -> to get future trend prediction.
+Choose: `N periods`, `company`, `department`, `specialty` -> to get future trend prediction.
 
 It can be ValueError: Dataframe has no rows, if your parameters are without data.
 """
@@ -62,8 +62,8 @@ with company:
 
 with service:
     serv_option = st.selectbox(
-        "Choose service category:",
-        tuple(series_data['service_category'].unique())
+        "Choose department:",
+        tuple(series_data['department'].unique())
     )
 
 with specialty:

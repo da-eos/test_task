@@ -7,6 +7,7 @@ from data_tools.charts_tools import (most_pays_service_mom,
                                      multi_filter_option,
                                      filter_by_year,
                                     get_boxplot_figure,
+                                    get_bar_figure,
                                     fig_corr)
 
 
@@ -53,10 +54,10 @@ department_options = st.multiselect(
 
 #filters
 mps_mom = filter_by_year(most_pays_service_mom,  year_options)
-mps_mom = multi_filter_option(most_pays_service_mom, 'month_name', months_options)
+mps_mom = multi_filter_option(mps_mom, 'month_name', months_options)
 mps_mom = multi_filter_option(mps_mom, 'department', department_options)
 
-table_view, chart_view = st.tabs(['Table View', 'Box Plot View'])
+table_view, chart_view = st.tabs(['Table View', 'Bar Plot View'])
 
 
 
@@ -69,22 +70,26 @@ with table_view:
     )
 with chart_view:
     # FIG VIEW BOX BY DEPS MOM
-    fig_avg_paid_mom = get_boxplot_figure(
+    fig_avg_paid_month = get_bar_figure(
     mps_mom,
-    f'Distribution of claim amount values',
     height=700,
+    title="AVG values of department's refund / paid amount by month",
     **{
-        'x':'month_name',
+        'x' : 'month_name',
         'y':'paid_amount',
         'color':'department',
-        'labels':{
-            'paid_amount':'Distribution of month values',
-            'month_name':'Month',
-            'department':'department'
-        }
-    }
-)
-    st.plotly_chart(fig_avg_paid_mom)
+        'text':'paid_amount',
+        'labels': {
+                   'paid_amount': 'AVG Paids or Refund amount',
+                    'month_name':'Month',
+                    'department':'Department'}
+    })
+    fig_avg_paid_month.update_layout(xaxis = {
+    'tickmode':'linear',
+    'dtick':1
+})  
+
+    st.plotly_chart(fig_avg_paid_month)
 
 
 st.header('What is claim amount distribution in a particular category?', anchor = 'section3')
@@ -123,7 +128,7 @@ mpss_mom = filter_by_year(most_pays_spec_mom, year_options)
 mpss_mom = multi_filter_option(mpss_mom, 'month_name', months_options)
 mpss_mom = multi_filter_option(mpss_mom, 'new_specialty', specs_options)
 
-fig_avg_spec_mom = get_boxplot_figure(
+fig_avg_spec_mom = get_bar_figure(
     mpss_mom,
     title=f'Distribution of paid_amount values in {year_options}',
     height=700,
@@ -176,7 +181,7 @@ data_comps = multi_filter_option(data_comps, 'month_name', months_options)
 data_comps = multi_filter_option(data_comps, 'payer', comps_options)
 
 
-fig_avg_comp_mom = get_boxplot_figure(
+fig_avg_comp_mom = get_bar_figure(
     data_comps,
     'Distribution of average claims amounts',
     height=700,
@@ -198,7 +203,7 @@ st.plotly_chart(fig_avg_comp_mom,
 
 st.header('Is there any correlations?', anchor = 'section5')
 
-st.pyplot(fig_corr, clear_figure=True)
+st.pyplot(fig_corr)
 
 st.markdown(
 """

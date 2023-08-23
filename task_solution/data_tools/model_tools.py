@@ -9,7 +9,7 @@ from prophet.plot import plot_plotly
 
 def filter_data_before_fit(data, company, service, specialty):
     company_filtered = data[data['payer'] == company]
-    service_filtered = company_filtered[company_filtered['service_category'] == service]
+    service_filtered = company_filtered[company_filtered['department'] == service]
     spec_filtered = service_filtered[service_filtered['new_specialty'] == specialty]
     to_fit = spec_filtered.rename(columns={
         'date':'ds',
